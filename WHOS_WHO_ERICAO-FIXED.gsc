@@ -1,28 +1,26 @@
-#include maps/mp/_utility;
-#include maps/mp/_visionset_mgr;
-#include maps/mp/_music;
-#include common_scripts/utility;
-#include maps/mp/gametypes_zm/_hud_util;
-#include maps/mp/gametypes_zm/_hud_message;
-#include maps/mp/gametypes_zm/_gv_actions;
-#include maps/mp/zombies/_zm;
-#include maps/mp/zombies/_zm_utility;
-#include maps/mp/zombies/_zm_weapons;
-#include maps/mp/zombies/_zm_audio;
-#include maps/mp/animscripts/zm_combat;
-#include maps/mp/animscripts/zm_utility;
-#include maps/mp/animscripts/utility;
-#include maps/mp/animscripts/shared;
-#include maps/mp/zombies/_zm_equipment;
-#include maps/mp/zombies/_zm_weap_cymbal_monkey;
-#include maps/mp/zombies/_zm_weapons;
-#include maps/mp/zombies/_zm_clone;
-#include maps/mp/zombies/_zm_chugabud;
-#include maps/mp/zombies/_zm_laststand;
-#include common_scripts/utility;
-#include maps/mp/_utility;
-#include maps/mp/zombies/_zm_perks;
-#include maps/mp/gametypes_zm/_clientids;
+#include maps\mp\_utility;
+#include maps\mp\_visionset_mgr;
+#include maps\mp\_music;
+#include common_scripts\utility;
+#include maps\mp\gametypes_zm\_hud_util;
+#include maps\mp\gametypes_zm\_hud_message;
+#include maps\mp\gametypes_zm\_gv_actions;
+#include maps\mp\zombies\_zm;
+#include maps\mp\zombies\_zm_utility;
+#include maps\mp\zombies\_zm_weapons;
+#include maps\mp\zombies\_zm_audio;
+#include maps\mp\animscripts\zm_combat;
+#include maps\mp\animscripts\zm_utility;
+#include maps\mp\animscripts\utility;
+#include maps\mp\animscripts\shared;
+#include maps\mp\zombies\_zm_equipment;
+#include maps\mp\zombies\_zm_weap_cymbal_monkey;
+#include maps\mp\zombies\_zm_clone;
+#include maps\mp\zombies\_zm_chugabud;
+#include maps\mp\zombies\_zm_laststand;
+#include maps\mp\zombies\_zm_perks;
+#include maps\mp\gametypes_zm\_clientids;
+
 
 
 
@@ -148,7 +146,7 @@ GivePerk( model, perk, perkname )
 	self TakeWeapon( weaponB );
 	self SwitchToWeapon( weaponA );
 	self setperk( perk );
-	self maps/mp/zombies/_zm_audio::playerexert( "burp" );
+	self maps\mp\zombies\_zm_audio::playerexert( "burp" );
 	self setblur( 4, 0.1 );
 	wait 0.1;
 	self setblur( 0, 0.1 );
@@ -268,11 +266,11 @@ chugabud_laststand() //Main WW code contained here
 	self endon( "disconnect" );
 	self endon( "chugabud_bleedout" );
 	
-	self maps/mp/zombies/_zm_laststand::increment_downed_stat();
+	self maps\mp\zombies\_zm_laststand::increment_downed_stat();
 	self.ignore_insta_kill = 1;
 	self.health = self.maxhealth;
-	self maps/mp/zombies/_zm_chugabud::chugabud_save_loadout();
-	self maps/mp/zombies/_zm_chugabud::chugabud_fake_death();
+	self maps\mp\zombies\_zm_chugabud::chugabud_save_loadout();
+	self maps\mp\zombies\_zm_chugabud::chugabud_fake_death();
 	wait 3;
 	if ( isDefined( self.insta_killed ) && self.insta_killed || isDefined( self.disable_chugabud_corpse ) )
 	{
@@ -321,7 +319,7 @@ chugabud_laststand() //Main WW code contained here
 		self notify( "whos_who_self_revive" );
 	}
 	self perk_abort_drinking( 0.1 );
-	self maps/mp/zombies/_zm_perks::perk_set_max_health_if_jugg( "health_reboot", 1, 0 );
+	self maps\mp\zombies\_zm_perks::perk_set_max_health_if_jugg( "health_reboot", 1, 0 );
 	self setorigin( corpse.origin );
 	self setplayerangles( corpse.angles );
 	if ( self player_is_in_laststand() )
@@ -426,12 +424,12 @@ chugabud_handle_multiple_instances( corpse )
 
 chugabud_spawn_corpse() 
 {
-	corpse = maps/mp/zombies/_zm_clone::spawn_player_clone( self, self.origin, undefined, self.whos_who_shader );
+	corpse = maps\mp\zombies\_zm_clone::spawn_player_clone( self, self.origin, undefined, self.whos_who_shader );
 	corpse.angles = self.angles;
-	corpse maps/mp/zombies/_zm_clone::clone_give_weapon( "m1911_zm" );
-	corpse maps/mp/zombies/_zm_clone::clone_animate( "laststand" );
+	corpse maps\mp\zombies\_zm_clone::clone_give_weapon( "m1911_zm" );
+	corpse maps\mp\zombies\_zm_clone::clone_animate( "laststand" );
 	corpse.revive_hud = self chugabud_revive_hud_create();
-	corpse thread maps/mp/zombies/_zm_laststand::revive_trigger_spawn();
+	corpse thread maps\mp\zombies\_zm_laststand::revive_trigger_spawn();
 	return corpse;
 }
 
@@ -466,7 +464,7 @@ chugabud_save_loadout()
 	{
 		logline1 = "weapon: " + weapon + "\n";
 		logprint( logline1 );
-		self.loadout.weapons[ index ] = maps/mp/zombies/_zm_weapons::get_player_weapondata( self, weapon );
+		self.loadout.weapons[ index ] = maps\mp\zombies\_zm_weapons::get_player_weapondata( self, weapon );
 		if ( weapon == currentweapon || self.loadout.weapons[ index ][ "alt_name" ] == currentweapon )
 		{
 			self.loadout.current_weapon = index;
@@ -489,7 +487,7 @@ chugabud_save_loadout()
 	self.loadout.perks = chugabud_save_perks( self );
 	
 	self chugabud_save_grenades();
-	if ( maps/mp/zombies/_zm_weap_cymbal_monkey::cymbal_monkey_exists() )
+	if ( maps\mp\zombies\_zm_weap_cymbal_monkey::cymbal_monkey_exists() )
 	{
 		self.loadout.zombie_cymbal_monkey_count = self getweaponammoclip( "cymbal_monkey_zm" );
 	}
@@ -518,7 +516,7 @@ chugabud_give_loadout()
 {
 	if(self.hasTombs == true){
 		
-		self thread maps/mp/zombies/_zm_perks::give_perk("specialty_scavenger");
+		self thread maps\mp\zombies\_zm_perks::give_perk("specialty_scavenger");
 		self.hasTombs = false;
 	}	
 	self takeallweapons();
@@ -545,7 +543,7 @@ chugabud_give_loadout()
 			i++;
 			continue;
 		}
-		self maps/mp/zombies/_zm_weapons::weapondata_give( loadout.weapons[ i ] );
+		self maps\mp\zombies\_zm_weapons::weapondata_give( loadout.weapons[ i ] );
 		i++;
 	}
 	if ( loadout.current_weapon >= 0 && isDefined( loadout.weapons[ loadout.current_weapon ][ "name" ] ) )
@@ -553,12 +551,12 @@ chugabud_give_loadout()
 		self switchtoweapon( loadout.weapons[ loadout.current_weapon ][ "name" ] );
 	}
 	self giveweapon( "knife_zm" );
-	self maps/mp/zombies/_zm_equipment::equipment_give( self.loadout.equipment );
+	self maps\mp\zombies\_zm_equipment::equipment_give( self.loadout.equipment );
 	loadout restore_weapons_for_chugabud( self );
 	self chugabud_restore_claymore();
 	self.score = loadout.score;
 	self.pers[ "score" ] = loadout.score;
-	perk_array = maps/mp/zombies/_zm_perks::get_perk_array( 1 );
+	perk_array = maps\mp\zombies\_zm_perks::get_perk_array( 1 );
 	for ( i = 0; i < perk_array.size; i++ )
 	{
 		perk = perk_array[ i ];
@@ -587,7 +585,7 @@ chugabud_give_loadout()
 			}
 			else
 			{
-				maps/mp/zombies/_zm_perks::give_perk( loadout.perks[ i ] );
+				maps\mp\zombies\_zm_perks::give_perk( loadout.perks[ i ] );
 			}
 			i++;
 		}
@@ -595,11 +593,11 @@ chugabud_give_loadout()
 	}
 
 	self chugabud_restore_grenades();
-	if ( maps/mp/zombies/_zm_weap_cymbal_monkey::cymbal_monkey_exists() )
+	if ( maps\mp\zombies\_zm_weap_cymbal_monkey::cymbal_monkey_exists() )
 	{
 		if ( loadout.zombie_cymbal_monkey_count )
 		{
-			self maps/mp/zombies/_zm_weap_cymbal_monkey::player_give_cymbal_monkey();
+			self maps\mp\zombies\_zm_weap_cymbal_monkey::player_give_cymbal_monkey();
 			self setweaponammoclip( "cymbal_monkey_zm", loadout.zombie_cymbal_monkey_count );
 		}
 	}
@@ -714,7 +712,7 @@ chugabud_get_spawnpoint()
 	}
 	if ( !isDefined( spawnpoint ) )
 	{
-		spawnpoint = maps/mp/zombies/_zm::check_for_valid_spawn_near_team( self, 1 );
+		spawnpoint = maps\mp\zombies\_zm::check_for_valid_spawn_near_team( self, 1 );
 	}
 	if ( !isDefined( spawnpoint ) )
 	{
@@ -755,7 +753,7 @@ chugabud_get_spawnpoint()
 		assert( isDefined( spawnpoints ), "Could not find initial spawn points!" );
 #/
 		*/
-		spawnpoint = maps/mp/zombies/_zm::getfreespawnpoint( spawnpoints, self );
+		spawnpoint = maps\mp\zombies\_zm::getfreespawnpoint( spawnpoints, self );
 	}
 
 	return spawnpoint;
@@ -787,7 +785,7 @@ get_chugabug_spawn_point_from_nodes( v_origin, min_radius, max_radius, max_heigh
 			}
 			if ( !positionwouldtelefrag( n_node.origin ) )
 			{
-				if ( maps/mp/zombies/_zm_utility::check_point_in_enabled_zone( n_node.origin, 1, a_player_volumes ) )
+				if ( maps\mp\zombies\_zm_utility::check_point_in_enabled_zone( n_node.origin, 1, a_player_volumes ) )
 				{
 					v_start = ( n_node.origin[ 0 ], n_node.origin[ 1 ], n_node.origin[ 2 ] + 30 );
 					v_end = ( n_node.origin[ 0 ], n_node.origin[ 1 ], n_node.origin[ 2 ] - 30 );
